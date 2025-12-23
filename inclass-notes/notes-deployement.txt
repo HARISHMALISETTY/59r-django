@@ -1,0 +1,53 @@
+1.Templates
+2.deployement of simple apis using render.
+
+1.need to create repo
+2.clone into local
+3.render account
+4.sync render with our GitHub repo
+5.deploy.
+
+
+here server is running because of packages available in the virtual env.
+
+
+while deploying we need to provide list of packaged required to be install within the cloud with the help of requirements.txt.
+
+this file can be generates with command within the project folder.
+
+pip freeze > requirements.txt
+
+this is just static server deployment.
+
+to deploy fulfilled dynamic server integrated with  db.
+then we need to deploy both server(using render) and db(aiven)
+1.static apis
+2.basic level dynamic-->qps
+3.fulfilled dynamic-->body object
+4.protected apis--->tokens
+5.middleware based apis--->mws
+
+
+steps:
+1.create GitHub repo with readme and gitignore.
+2.clone the repo in local
+3.write the code and push the code by ignoring venv folder.
+3.1.need to add reqs.txt within the project by using command
+pip freeze > requirements.txt
+4.create render account with GitHub
+5.choose new project--->webservice
+6.give name without spaces,symbols
+7.choose language,branch,region.
+8.choose directory.
+9.build command 
+10.start command
+11.deploy webservice
+12.issue will occur for disallowed hosts--->add url in allowedhosts.
+13.again push the code.
+14.deployement process will starts automatically.
+
+
+
+
+
+

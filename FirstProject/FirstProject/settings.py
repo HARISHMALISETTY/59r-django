@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%%l_)i4ep8&4(6cm&0ti)j&65p7dg0t2p)=19gp0-d(#b^tk*o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["firstserver-r3l4.onrender.com"]
+ALLOWED_HOSTS = ["firstserver-r3l4.onrender.com","127.0.0.1"]
 
 
 # Application definition
@@ -77,8 +77,17 @@ WSGI_APPLICATION = 'FirstProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '59r-db',
+        'USER':'root',
+        'HOST':'localhost',
+        'PASSWORD':'Harish258@@',
+        'PORT':'3306',
+        'OPTIONS':{
+            "charset":"utf8mb4",
+            "sql_mode":'STRICT_TRANS_TABLES'
+            }
+
     }
 }
 
