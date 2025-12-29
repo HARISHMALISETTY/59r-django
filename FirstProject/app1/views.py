@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
+from .models import Students,Employees
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 # Create your views here.
@@ -219,3 +222,46 @@ def productByRating(request,rating):
         return JsonResponse({"status":"failure","message":"only get methoda allowed"})
     except Exception as e:
         return JsonResponse({"message":"something went wrong"})
+
+@csrf_exempt #will act as a decorator
+def addStudent(request):
+    try:
+        if request.method=="POST":
+            print("started")
+            inputData=json.loads(request.body)
+            print(inputData)
+
+            Students.objects.create(stud_name=inputData["name"],
+            stud_age=inputData["age"],
+            stud_gender=inputData["gender"],
+            stud_email=inputData["email"])
+
+            return JsonResponse({"status":"success","msg":"record added successfully"},status=201)
+        return JsonResponse({"status":"failure","msg":"only post method allowed"},status=400)
+    except Exception as e:
+        return JsonResponse({"status":"error","msg":"error occured"})
+
+@csrf_exempt
+def addEmployee(request):
+    try:
+        if request.method=="POST":
+            inputData=json.loads(request.body)
+            Employees.objects.create(emp_name=inputData["name"],
+            emp_age=inputData["age"],
+            emp_gender=inputData["gender"],
+            emp_email=inputData["mail"])
+            return JsonResponse({"status":"success","msg":"inserted succesfully"},status=201)
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        return JsonResponse({"status":"error","msg":"error occured"})
+    
+def getStudents(request):
+    try:
+        if request.method=="GET":  
+            data=Students.objects.values() 
+            final_result=list(data) 
+            print(final_result)        
+            return JsonResponse({"status":"success","msg":"recordsFetched successfully","data":final_result},status=200)
+        return JsonResponse({"status":"failure","msg":"only post method allowed"},status=400)
+    except Exception as e:
+        return JsonResponse({"status":"error","msg":"error occured"},status=500)

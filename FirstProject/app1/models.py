@@ -12,3 +12,4 @@ class Employees(models.Model):
     emp_age=models.IntegerField()
     emp_gender=models.CharField(max_length=100)
     emp_email=models.EmailField(unique=True)
+
