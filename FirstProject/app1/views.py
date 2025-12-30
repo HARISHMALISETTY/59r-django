@@ -210,6 +210,7 @@ def productByRating(request,rating):
     try:
         cnvrt_rating=float(rating)
         if request.method=="GET":
+            print(request.GET)
             filteredData=[]
             for product in ecommerce_products:
                 if product["rating"]>=cnvrt_rating:
@@ -245,6 +246,10 @@ def addStudent(request):
 def addEmployee(request):
     try:
         if request.method=="POST":
+            print(request)
+            print(request.method)
+            print(request.body)
+            
             inputData=json.loads(request.body)
             Employees.objects.create(emp_name=inputData["name"],
             emp_age=inputData["age"],
@@ -265,3 +270,52 @@ def getStudents(request):
         return JsonResponse({"status":"failure","msg":"only post method allowed"},status=400)
     except Exception as e:
         return JsonResponse({"status":"error","msg":"error occured"},status=500)
+
+def getStudentsByGender(request,gender):
+    try:
+        if request.method=="GET":
+            data=list(Students.objects.filter(stud_gender=gender).values())
+            print(data)
+            return JsonResponse({"status":"success",
+                                "msg":"records fetched successfully",
+                                "data":data},status=200)
+        return JsonResponse({"status":"failure","msg":"only get method allowed"},status=400)
+    except Exception as e:
+         return JsonResponse({"status":"error","msg":"error occured"},status=500)
+        
+
+def getStudentsByAge(request,Age):
+    try:
+        if request.method=="GET":
+            data=list(Students.objects.filter(stud_age__lt=Age).values())
+            print(data)
+            return JsonResponse({"status":"success",
+                                "msg":"records fetched successfully",
+                                "data":data},status=200)
+        return JsonResponse({"status":"failure","msg":"only get method allowed"},status=400)
+    except Exception as e:
+         return JsonResponse({"status":"error","msg":"error occured"},status=500)
+@csrf_exempt
+def UpdateStudentAgeById(request,ref_id):
+    try:
+        if request.method=="PUT": 
+            data=json.loads(request.body)
+            new_age=data["new_age"]
+            update=Students.objects.filter(id=ref_id).update(stud_age=new_age)  
+            print(update)    
+            if update==0:
+                msg="no record found to update"
+            else:
+                msg="record is updated successfully"     
+            return JsonResponse({"status":"success",
+                                "msg":msg},status=200)
+        return JsonResponse({"status":"failure","msg":"only PUT method allowed"},status=400)
+    except Exception as e:
+         return JsonResponse({"status":"error","msg":"error occured"},status=500)
+
+
+#__lt=--->lessthan
+#__gt=---->greaterthan
+#__lte=---->lessthanorequalto
+#__gte=---->greaterthanorequalto
+
