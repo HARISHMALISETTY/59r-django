@@ -13,3 +13,10 @@ class Employees(models.Model):
     emp_gender=models.CharField(max_length=100)
     emp_email=models.EmailField(unique=True)
 
+class Resolutions(models.Model):
+    person_name=models.CharField(max_length=100)
+    resolution=models.CharField(max_length=100)
+    Deadline_in_mnths=models.IntegerField()
+    lastYearResolutionSatus=models.CharField(max_length=150)
+    lastYearAchievements=models.CharField(max_length=250)
+

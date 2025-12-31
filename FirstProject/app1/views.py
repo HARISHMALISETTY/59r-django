@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .models import Students,Employees
+from .models import Students,Employees,Resolutions
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -314,8 +314,48 @@ def UpdateStudentAgeById(request,ref_id):
          return JsonResponse({"status":"error","msg":"error occured"},status=500)
 
 
+
+
 #__lt=--->lessthan
 #__gt=---->greaterthan
 #__lte=---->lessthanorequalto
 #__gte=---->greaterthanorequalto
+
+@csrf_exempt
+def AddResolutions(request):
+    try:
+        if request.method=="POST":
+            inputData=json.loads(request.body)
+            Resolutions.objects.create(person_name=inputData["name"],
+            resolution=inputData["resolution"],
+            Deadline_in_mnths=inputData["deadline"],
+            lastYearResolutionSatus=inputData["status_of_lastyear"],
+            lastYearAchievements=inputData["lastyear_acheivements"])
+
+            return JsonResponse({"status":"success","msg":"data inserted successfully"})
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        print(e)
+        return JsonResponse({"status":"error","msg":"error occured"},status=500)
+
+@csrf_exempt
+def updateResolution(request,ref_id):
+    try:
+        if request.method=="PUT": 
+            data=json.loads(request.body)
+            new_resolution=data["new_res"]
+            update=Resolutions.objects.filter(id=ref_id).update(resolution=new_resolution)  
+            print(update)    
+            if update==0:
+                msg="no record found to update"
+            else:
+                msg="resolution  is updated successfully"     
+            return JsonResponse({"status":"success",
+                                "msg":msg},status=200)
+        return JsonResponse({"status":"failure","msg":"only PUT method allowed"},status=400)
+    except Exception as e:
+         return JsonResponse({"status":"error","msg":"error occured"},status=500)
+
+
+
 
