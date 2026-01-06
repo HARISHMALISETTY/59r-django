@@ -356,6 +356,22 @@ def updateResolution(request,ref_id):
     except Exception as e:
          return JsonResponse({"status":"error","msg":"error occured"},status=500)
 
+@csrf_exempt
+def job1(request):
+    try:
+        if request.method=="POST":
+            return JsonResponse({"status":"success","msg":"job1 applied successfully"})
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        return JsonResponse({"status":"error","msg":"something went wrong"})
 
-
-
+@csrf_exempt
+def job2(request):
+    try:
+        if request.method=="POST":
+            print(json.loads(request.body))
+            return JsonResponse({"status":"success","msg":"job2 applied successfully"})
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        print("errorrrrr")
+        return JsonResponse({"status":"error","msg":"something went wrong"})
