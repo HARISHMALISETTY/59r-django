@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .models import Students,Employees,Resolutions
+from .models import Students,Employees,Resolutions,UserDetails
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -375,3 +375,26 @@ def job2(request):
     except Exception as e:
         print("errorrrrr")
         return JsonResponse({"status":"error","msg":"something went wrong"})
+@csrf_exempt
+def EngineeringSeat(request):
+    try:
+        if request.method=="POST":
+            return JsonResponse({"status":"success","msg":"u r eligible for engineering seat"})
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        print("errorrrrr")
+        return JsonResponse({"status":"error","msg":"something went wrong"})
+
+
+@csrf_exempt
+def addUser(request):
+    try:
+        if request.method=="POST":            
+            inputData=json.loads(request.body)
+            UserDetails.objects.create(username=inputData["username"],
+            password=inputData["password"],
+            userEmail=inputData["email"])
+            return JsonResponse({"status":"success","msg":"user created successfully"},status=201)
+        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+    except Exception as e:
+        return JsonResponse({"status":"error","msg":"error occured"})

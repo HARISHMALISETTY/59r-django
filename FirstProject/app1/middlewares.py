@@ -1,5 +1,6 @@
 import json 
 from django.http import HttpResponse,JsonResponse
+import re
 
 # class Middleware:
 #     def __init__(self,get_response):
@@ -44,20 +45,20 @@ class SSCMiddleware():
                 return response 
             return JsonResponse({"status":"failure","msg":"u should qualify ssc to apply for this job"})     
 
-class MedicalFitMiddleWare():
-    def __init__(self,get_response):
-        self.get_response=get_response
-    def __call__(self,request):
-        print(request.method,"job2 mf")
-        if request.path =="/job2/": 
-            print("mf triggered")          
-            incoming_data=json.loads(request.body)            
-            medically_fit=incoming_data.get("medically_fit")
-            if medically_fit == "True":
-                response=self.get_response(request) 
-                print(response,"hellooooo")
-                return response 
-            return JsonResponse({"status":"failure","msg":"u should medically fit to apply for this job"})     
+# class MedicalFitMiddleWare():
+#     def __init__(self,get_response):
+#         self.get_response=get_response
+#     def __call__(self,request):
+#         print(request.method,"job2 mf")
+#         if request.path =="/job2/": 
+#             print("mf triggered")          
+#             incoming_data=json.loads(request.body)            
+#             medically_fit=incoming_data.get("medically_fit")
+#             if medically_fit == "True":
+#                 response=self.get_response(request) 
+#                 print(response,"hellooooo")
+#                 return response 
+#             return JsonResponse({"status":"failure","msg":"u should medically fit to apply for this job"})     
 
 
 class AgeValidationMiddleware():
@@ -76,3 +77,66 @@ class AgeValidationMiddleware():
                 return response 
             return JsonResponse({"status":"failure","msg":"u should have atleast age of 21 to apply for this job"})     
 
+class IntermediateValidationMiddleware:
+    def __init__(self,get_response):
+        self.get_response=get_response        
+    def __call__(self,request):
+        if request.path=="/seat/":
+            print("seattttt")
+            incoming_data=json.loads(request.body)
+            inter_result=incoming_data.get("inter_result")
+            if inter_result:
+                response=self.get_response(request)
+                return response
+            return JsonResponse({"status":"failure","msg":"u should pass intermediate atleast"})
+
+class EamcetqualifyMiddleWare:
+    def __init__(self,get_response):
+        self.get_response=get_response        
+    def __call__(self,request):
+        if request.path=="/seat/":
+            print("seattttt")
+            incoming_data=json.loads(request.body)
+            eamcet_result=incoming_data.get("eamcet_result")
+            if eamcet_result:
+                response=self.get_response(request)
+                return response
+            return JsonResponse({"status":"failure","msg":"u should qualify eamcet"})
+class UsernameMiddleware:
+    def __init__(self,get_response):
+        self.get_response=get_response        
+    def __call__(self,request):
+        if request.path=="/user/":            
+            incoming_data=json.loads(request.body)
+            user_name=incoming_data.get("username")
+            user_name_valid=re.match(r"^[A-Za-z0-9_]{5,15}$",user_name)
+            if user_name_valid:
+                response=self.get_response(request)
+                return response
+            return JsonResponse({"status":"failure","msg":"invalid username"})
+ 
+class PasswordMiddleware:
+    def __init__(self,get_response):
+        self.get_response=get_response        
+    def __call__(self,request):
+        if request.path=="/seat/":
+            print("seattttt")
+            incoming_data=json.loads(request.body)
+            eamcet_result=incoming_data.get("eamcet_result")
+            if eamcet_result:
+                response=self.get_response(request)
+                return response
+            return JsonResponse({"status":"failure","msg":"u should qualify eamcet"})
+ 
+class Emailmiddleware:
+    def __init__(self,get_response):
+        self.get_response=get_response        
+    def __call__(self,request):
+        if request.path=="/seat/":
+            print("seattttt")
+            incoming_data=json.loads(request.body)
+            eamcet_result=incoming_data.get("eamcet_result")
+            if eamcet_result:
+                response=self.get_response(request)
+                return response
+            return JsonResponse({"status":"failure","msg":"u should qualify eamcet"})

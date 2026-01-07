@@ -53,8 +53,10 @@ MIDDLEWARE = [
     # 'app1.middlewares.Middleware',
     # 'app1.middlewares.Middleware1',
     # 'app1.middlewares.SSCMiddleware',
-    'app1.middlewares.MedicalFitMiddleWare',
-    'app1.middlewares.AgeValidationMiddleware'
+    # 'app1.middlewares.MedicalFitMiddleWare',
+    # 'app1.middlewares.AgeValidationMiddleware',
+    'app1.middlewares.IntermediateValidationMiddleware',
+    'app1.middlewares.EamcetqualifyMiddleWare'
 ]
 
 ROOT_URLCONF = 'FirstProject.urls'

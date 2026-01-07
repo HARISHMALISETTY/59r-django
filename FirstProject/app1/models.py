@@ -20,3 +20,7 @@ class Resolutions(models.Model):
     lastYearResolutionSatus=models.CharField(max_length=150)
     lastYearAchievements=models.CharField(max_length=250)
 
+class UserDetails(models.Model):
+    username=models.CharField(max_length=100,unique=True)
+    password=models.CharField(max_length=150)
+    userEmail=models.EmailField(unique=True)
