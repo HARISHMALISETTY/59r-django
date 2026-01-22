@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app1',
     'app2',
-    'app3'
+    'app3',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'app1.middlewares.CORSMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,8 +57,11 @@ MIDDLEWARE = [
     # 'app1.middlewares.SSCMiddleware',
     # 'app1.middlewares.MedicalFitMiddleWare',
     # 'app1.middlewares.AgeValidationMiddleware',
-    'app1.middlewares.IntermediateValidationMiddleware',
-    'app1.middlewares.EamcetqualifyMiddleWare'
+#     'app1.middlewares.IntermediateValidationMiddleware',
+#     'app1.middlewares.EamcetqualifyMiddleWare'
+]
+CORS_ALLOW_HEADERS = [
+    'content-type',
 ]
 
 ROOT_URLCONF = 'FirstProject.urls'

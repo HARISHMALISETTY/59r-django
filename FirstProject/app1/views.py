@@ -321,22 +321,57 @@ def UpdateStudentAgeById(request,ref_id):
 #__lte=---->lessthanorequalto
 #__gte=---->greaterthanorequalto
 
+
+
 @csrf_exempt
 def AddResolutions(request):
     try:
-        if request.method=="POST":
-            inputData=json.loads(request.body)
-            Resolutions.objects.create(person_name=inputData["name"],
-            resolution=inputData["resolution"],
-            Deadline_in_mnths=inputData["deadline"],
-            lastYearResolutionSatus=inputData["status_of_lastyear"],
-            lastYearAchievements=inputData["lastyear_acheivements"])
+        if request.method != "POST":
+            return JsonResponse({"error": "Only POST allowed"}, status=405)
 
-            return JsonResponse({"status":"success","msg":"data inserted successfully"})
-        return JsonResponse({"status":"failure","msg":"only post method allowed"})
+        data = json.loads(request.body.decode("utf-8"))
+
+        Resolutions.objects.create(
+            person_name = data.get("name"),
+            resolution = data.get("resolution"),
+            Deadline_in_mnths = int(data.get("deadline")),
+            lastYearResolutionSatus = data.get("status_of_lastyear"),
+            lastYearAchievements = data.get("lastyear_acheivements")
+        )
+
+        return JsonResponse({
+            "status": "success",
+            "msg": "data inserted successfully"
+        })
+
     except Exception as e:
-        print(e)
-        return JsonResponse({"status":"error","msg":"error occured"},status=500)
+        print("ERROR 👉", e)   # 🔥 THIS IS IMPORTANT
+        return JsonResponse({
+            "status": "error",
+            "msg": str(e)
+        }, status=500)
+
+def getAllResolutions(request):
+    try:
+        if request.method != "GET":
+            return JsonResponse(
+                {"status": "failure", "msg": "Only GET method allowed"},
+                status=405
+            )
+        data = list(Resolutions.objects.all().values())
+
+        return JsonResponse({
+            "status": "success",
+            "msg": "Resolutions fetched successfully",
+            "data": data
+        }, status=200)
+
+    except Exception as e:
+        print("ERROR 👉", e)
+        return JsonResponse({
+            "status": "error",
+            "msg": str(e)
+        }, status=500)
 
 @csrf_exempt
 def updateResolution(request,ref_id):
