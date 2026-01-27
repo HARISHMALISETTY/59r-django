@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .models import Students,Employees,Resolutions,UserDetails
+from .models import Students,Employees,Resolutions,UserDetails,User
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -433,3 +433,32 @@ def addUser(request):
         return JsonResponse({"status":"failure","msg":"only post method allowed"})
     except Exception as e:
         return JsonResponse({"status":"error","msg":"error occured"})
+
+@csrf_exempt
+def signup(request):
+    data = json.loads(request.body)
+    
+    user = User.objects.create(
+        username=data["username"],
+        email=data["email"],
+        password=data["password"]
+    )
+
+    return JsonResponse({
+        "status": "success",
+        "msg": "User registered successfully"
+    }, status=201)
+
+    
+@csrf_exempt
+def login(request):
+    user_info=json.loads(request.body)
+    user=user_info.get("username")   
+
+    return JsonResponse({
+
+        "status": "success",
+        "msg": "Login successful",
+        "greetings":f"welcome {user}",
+        
+    })
