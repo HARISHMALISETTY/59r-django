@@ -3,6 +3,10 @@ from django.http import HttpResponse,JsonResponse
 from .models import Students,Employees,Resolutions,UserDetails,User
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.hashers import make_password
+import jwt
+from django.conf import settings
+from datetime import datetime, timedelta
 
 
 # Create your views here.
@@ -437,11 +441,12 @@ def addUser(request):
 @csrf_exempt
 def signup(request):
     data = json.loads(request.body)
+    hashed_password=make_password(data["password"])
     
     user = User.objects.create(
         username=data["username"],
         email=data["email"],
-        password=data["password"]
+        password=hashed_password
     )
 
     return JsonResponse({
@@ -453,12 +458,26 @@ def signup(request):
 @csrf_exempt
 def login(request):
     user_info=json.loads(request.body)
-    user=user_info.get("username")   
+    user=user_info.get("username") 
+    user_existing_info=list(User.objects.filter(username=user).values())
+    user_role=user_existing_info[0].get("role")
+    print(user_role)
+    print(user_existing_info)
+    payload={
+            "user":user,
+            "role":user_role,
+            "email":user_existing_info[0].get("email"),
+            "iat":datetime.utcnow(),
+            "exp":datetime.utcnow() + timedelta(seconds=settings.JWT_EXPIRYTIME)
+            }
+
+    token=jwt.encode(payload,settings.JWT_SECRET_KEY,algorithm=settings.JWT_ALGORITHM) 
 
     return JsonResponse({
 
         "status": "success",
         "msg": "Login successful",
         "greetings":f"welcome {user}",
+        "token":token
         
     })

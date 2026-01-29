@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse,JsonResponse
 import re
 from .models import User
+from django.contrib.auth.hashers import check_password
 # class Middleware:
 #     def __init__(self,get_response):
 #         print("server starrted by harish")
@@ -213,8 +214,8 @@ class authMiddleware:
                 except User.DoesNotExist:
                     return JsonResponse({"error": "Invalid username"}, status=401)
 
-                if user.password != password:
-                # if not check_password(password,user.password):
+                # if user.password != password:
+                if not check_password(password,user.password):
                     return JsonResponse({"error": "Invalid password"}, status=401)
 
         response=self.get_response(request)
