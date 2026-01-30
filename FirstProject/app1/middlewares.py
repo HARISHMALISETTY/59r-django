@@ -175,7 +175,10 @@ class authMiddleware:
     def __call__(self,request):
         if request.path in ["/signup/", "/login/"] and request.method == "POST":
              try:
-                data = json.loads(request.body)
+                # data = json.loads(request.body)
+                data=request.POST
+                profile_pic=request.FILES
+                print(profile_pic)
              except json.JSONDecodeError:
                 return JsonResponse({"error": "Invalid JSON data"}, status=400)
              if request.path == "/signup/":
